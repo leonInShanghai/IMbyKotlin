@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".RegisterActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/logo"
+        android:layout_margin="80dp"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center_horizontal"/>
+
+    <!-- imeOptions="actionNext" 作用：指引键盘上的下一步 -->
+    <EditText
+        android:id="@+id/userName"
+        android:maxLength="11"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textColor="@android:color/black"
+        android:hint="@string/user_name"
+        android:inputType="number"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:id="@+id/password"
+        android:maxLength="20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textColor="@android:color/black"
+        android:hint="@string/please_input_password"
+        android:inputType="numberPassword"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:id="@+id/cofirmPassword"
+        android:maxLength="20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textColor="@android:color/black"
+        android:hint="@string/password_again"
+        android:inputType="numberPassword"
+        android:imeOptions="actionNext"/>
+
+    <Button
+        android:id="@+id/register"
+        android:textAllCaps="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/login_btn"
+        android:textSize="22sp"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:text="@string/register"/>
+
+</LinearLayout>

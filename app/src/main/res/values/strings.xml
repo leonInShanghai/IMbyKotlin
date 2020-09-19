@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">波聊</string>
+    <string name="user_name_error">请输入正确的手机号</string>
+    <string name="password_error">请输入正确的密码</string>
+    <string name="logging">登录中...</string>
+    <string name="login_failed">登录失败</string>
+    <string name="user_name">请输入账号</string>
+    <string name="please_input_password">请输入密码</string>
+    <string name="please_allow_permission">请允许权限</string>
+    <string name="login">登录</string>
+    <string name="new_user">新用户</string>
+    <string name="password_again">请再次输入密码</string>
+    <string name="register">注册</string>
+    <string name="registering">正在注册</string>
+    <string name="cofirm_password_error">两次输入的密码不一致</string>
+    <string name="register_success">注册成功</string>
+    <string name="register_failed">注册失败</string>
+</resources>

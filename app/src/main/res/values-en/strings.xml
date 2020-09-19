@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BoChat</string>
+    <string name="user_name_error">Please enter the mobile phone number</string>
+    <string name="password_error">Please enter the correct password</string>
+    <string name="logging">Logging in...</string>
+    <string name="login_failed">Login failed</string>
+    <string name="user_name">Please enter the account</string>
+    <string name="please_input_password">Please enter the password</string>
+    <string name="please_allow_permission">Please allow permission</string>
+    <string name="login">login</string>
+    <string name="new_user">new user</string>
+    <string name="password_again">Please enter the password again</string>
+    <string name="register">Register</string>
+    <string name="registering">Registering</string>
+    <string name="cofirm_password_error">The two passwords are not the same</string>
+    <string name="register_success">registered successfully</string>
+    <string name="register_failed">registered failed</string>
+</resources>

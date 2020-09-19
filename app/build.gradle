@@ -1,0 +1,91 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+
+    // 原装自动生成代码
+    // compileSdkVersion 30
+    // buildToolsVersion "30.0.2"
+
+    // 2020-09-12修改
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tool_version
+
+    defaultConfig {
+        applicationId "com.bobo.imbykotlin"
+
+        // 原装自动生成代码
+        // minSdkVersion 16
+        // targetSdkVersion 30
+        // versionCode 1
+        // versionName "1.0"
+
+        // 2020-09-12修改
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            // bmob设置支持的so库
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86'
+        }
+
+        // 兼容android6.0系统，如果这句话报错，可在dependencies标签下
+        // implementation cn.bmob.android:http-legacy:1.0’
+        // useLibrary 'org.apache.http.legacy'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    // 创建app自动生成的代码
+    // implementation fileTree(dir: "libs", include: ["*.jar"])
+    // implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    // implementation 'androidx.core:core-ktx:1.3.1'
+    // implementation 'androidx.appcompat:appcompat:1.2.0'
+    // implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    // testImplementation 'junit:junit:4.12'
+    // androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    // androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+
+    // 2020-09-12修改
+     implementation fileTree(dir: "libs", include: ["*.jar"])
+     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+     implementation 'com.android.support:appcompat-v7:28.0.0'
+     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+     testImplementation 'junit:junit:4.12'
+     androidTestImplementation 'com.android.support.test:runner:1.0.1'
+     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+
+    // Anko通用库
+    implementation "org.jetbrains.anko:anko-commons:$anko_version"
+    // Anko sqlite库
+    implementation "org.jetbrains.anko:anko-sqlite:$anko_version"
+    // implementation "com.android.support:appcompat-v7:$support_version"
+    implementation "com.android.support:appcompat-v7:28.0.0"
+    implementation "com.android.support:cardview-v7:$support_version"
+
+    // 手写写错了😄
+    // implementation ('com.rounghike:bottom-bar:2.3.1'){
+    implementation ('com.roughike:bottom-bar:2.3.1'){
+        exclude module:'design'
+    }
+
+    // bmob后端云依赖
+    implementation ('cn.bmob.android:bmob-sdk:3.5.5') {
+        // exclude group: 'io.reactivex:rxandroid'
+        // exclude group: 'io.reactivex:rxjava'
+    }
+    // implementation 'cn.bmob.android:http-legacy:1.0'
+}
