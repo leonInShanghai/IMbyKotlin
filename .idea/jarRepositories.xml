@@ -41,5 +41,10 @@
       <option name="name" value="maven" />
       <option name="url" value="https://raw.github.com/bmob/bmob-android-sdk/master" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="https://raw.githubusercontent.com/HyphenateInc/Hyphenate-SDK-Android/master/repository" />
+    </remote-repository>
   </component>
 </project>

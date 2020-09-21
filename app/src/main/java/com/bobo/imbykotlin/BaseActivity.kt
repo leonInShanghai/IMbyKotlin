@@ -65,6 +65,8 @@ abstract class BaseActivity : AppCompatActivity() {
      * 供子类根据需要 调用后隐藏键盘
      */
     open fun hideSoftKeyboard() {
-        inputMethodManager.hideSoftInputFromWindow(currentFocus.windowToken, 0)
+        if (currentFocus != null) {
+            inputMethodManager.hideSoftInputFromWindow(currentFocus.windowToken, 0)
+        }
     }
 }

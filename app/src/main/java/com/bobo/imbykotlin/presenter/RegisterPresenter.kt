@@ -1,11 +1,14 @@
 package com.bobo.imbykotlin.presenter
 
-import cn.bmob.v3.BmobUser
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.SaveListener
 import com.bobo.imbykotlin.contract.RegiseterContract
 import com.bobo.imbykotlin.extentiors.isValidPassword
 import com.bobo.imbykotlin.extentiors.isValidUserName
+import com.hyphenate.chat.EMClient
+import com.hyphenate.exceptions.HyphenateException
+import org.jetbrains.anko.doAsync
+
+// import org.jetbrains.anko.doAsync
+// import org.jetbrains.anko.uiThread
 
 /**
  * Created by 公众号：IT波 on 2020/9/19 Copyright © Leon. All rights reserved.
@@ -28,7 +31,9 @@ class RegisterPresenter(val view: RegiseterContract.View) : RegiseterContract.Pr
                     view.onStartRegister()
 
                     // 开始注册逻辑请求发送给 Bmob服务器 再注册环信
-                    registerBmob(userName, password)
+                    // registerBmob(userName, password)
+
+                    registerEaseMod(userName, password)
                 } else {
                     // 通知view两次密码不一致
                     view.onConfirmPasswordError()
@@ -43,24 +48,75 @@ class RegisterPresenter(val view: RegiseterContract.View) : RegiseterContract.Pr
         }
     }
 
-    // 开始注册逻辑请求发送给 Bmob服务器 再注册环信
-    private fun registerBmob(userName: String, password: String) {
-        val bu = BmobUser()
-        bu.username = userName
-        bu.setPassword(password)
+    // 开始注册逻辑请求发送给 Bmob服务器 再注册环信 没有使用下面是原因
+    // 指定的Android SDK构建工具版本（26.0.1）被忽略，因为它低于Android Gradle Plugin 3.1.4支持的最低版本
+    // （27.0.3）
+//    private fun registerBmob(userName: String, password: String) {
+//        val bu = BmobUser()
+//        bu.username = userName
+//        bu.setPassword(password)
+//
+//        bu.signUp<BmobUser>(object : SaveListener<BmobUser>() {
+//            override fun done(s: BmobUser?, e: BmobException?) {
+//                if (e == null) {
+//                    // Bmob注册成功，注册环信
+//                    registerEaseMod(userName, password)
+//                } else {
+//                    if (e.errorCode == 202){
+//                        // 该用户名Bmob已经采取,去注册环信
+//                        registerEaseMod(userName, password)
+//                    } else {
+//                        // Bmob注册失败 通知view注册失败
+//                        view.onRegisterFailed()
+//                    }
+//                }
+//            }
+//        })
+//    }
 
-        bu.signUp<BmobUser>(object : SaveListener<BmobUser>() {
-            override fun done(s: BmobUser?, e: BmobException?) {
-                if (s == null) {
-                    // Bmob注册成功，注册环信
+    // 注册好Bmob再注册环信
+    private fun registerEaseMod(userName: String, password: String) {
 
-                } else {
-                    // Bmob注册失败 通知view注册失败
+        // 环信的需要到子线程去操作注册业务逻辑
+//        object : Thread() {
+//            override fun run() {
+//                try {
+//                    // 在子线程注册用户
+//                    EMClient.getInstance().createAccount(userName, password)
+//
+//                    // 没有抛异常就是成功 此时需要切换到主线程通知view
+//                    uiThread {
+//                        view.onRegisterSuccess()
+//                    }
+//                } catch (e: HyphenateException) {
+//                    // 进了异常就是注册失败，切换到主线程通知view注册失败了
+//                    e.printStackTrace()
+//                    uiThread {
+//                        view.onRegisterFailed()
+//                    }
+//                }
+//            }
+//        }.start()
+
+
+
+        // 环信的需要到子线程去操作注册业务逻辑
+        doAsync {
+            try {
+                // 在子线程注册用户
+                EMClient.getInstance().createAccount(userName , password)
+
+                // 没有抛异常就是成功 此时需要切换到主线程通知view
+                uiThread {
+                    view.onRegisterSuccess()
+                }
+            } catch (e: HyphenateException) {
+                // 进了异常就是注册失败，切换到主线程通知view注册失败了
+                e.printStackTrace()
+                uiThread {
                     view.onRegisterFailed()
                 }
             }
-        })
+        }
     }
-
-
 }

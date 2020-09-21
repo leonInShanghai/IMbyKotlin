@@ -1,2 +1,3 @@
+include ':easeui'
 include ':app'
 rootProject.name = "IMbyKotlin"

@@ -28,10 +28,10 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        ndk {
-            // bmob设置支持的so库
-            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86'
-        }
+//        ndk {
+//            // bmob设置支持的so库
+//            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86'
+//        }
 
         // 兼容android6.0系统，如果这句话报错，可在dependencies标签下
         // implementation cn.bmob.android:http-legacy:1.0’
@@ -44,6 +44,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // use legacy for android 6.0
+    // useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
@@ -68,6 +81,9 @@ dependencies {
      androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
 
+    // 环信http://docs-im.easemob.com/im/200androidclientintegration/10androidsdkimport#
+    // implementation'com.hyphenate:hyphenate-sdk:3.3.0'
+
     // Anko通用库
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     // Anko sqlite库
@@ -82,10 +98,17 @@ dependencies {
         exclude module:'design'
     }
 
-    // bmob后端云依赖
-    implementation ('cn.bmob.android:bmob-sdk:3.5.5') {
+    // bmob后端云依赖 没有使用的原因如下
+    // 指定的Android SDK构建工具版本（26.0.1）被忽略，因为它低于Android Gradle Plugin 3.1.4支持的最低版本（27.0.3）
+    // implementation ('cn.bmob.android:bmob-sdk:3.5.5') {
         // exclude group: 'io.reactivex:rxandroid'
         // exclude group: 'io.reactivex:rxjava'
-    }
+    // }
     // implementation 'cn.bmob.android:http-legacy:1.0'
+
+    implementation project(':easeui')
+    implementation 'com.parse:parse-android:1.13.1'
+    implementation 'com.android.support:multidex:1.0.1'
+    implementation 'com.google.android.gms:play-services-base:11.4.0'
+    implementation 'com.google.firebase:firebase-messaging:11.4.0'
 }

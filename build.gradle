@@ -8,7 +8,7 @@ buildscript {
     // ext.compile_sdk_version = 26
     ext.compile_sdk_version = 28
     ext.build_tool_version = "26.0.1"
-    ext.min_sdk_version = 15
+    ext.min_sdk_version = 26 // 15
     // ext.target_sdk_version = 26
     ext.target_sdk_version = 28
     ext.support_version = "26.0.1"
@@ -38,7 +38,8 @@ allprojects {
         google()
         jcenter()
         // https://blog.csdn.net/shenyudi/article/details/52404139
-        maven { url "https://raw.github.com/bmob/bmob-android-sdk/master" }
+        // maven { url "https://raw.github.com/bmob/bmob-android-sdk/master" }
+
     }
 }
 

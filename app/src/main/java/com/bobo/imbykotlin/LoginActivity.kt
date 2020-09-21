@@ -67,9 +67,11 @@ class LoginActivity : BaseActivity(), LoginContract.View {
 
     // 判断是否已经有了写磁盘的权限（因为环信sdk中有数据库操作）
     private fun hasWriteExternalStoragePermission(): Boolean {
-        val result = ActivityCompat.checkSelfPermission(this, Manifest.
+        val resultStorage = ActivityCompat.checkSelfPermission(this, Manifest.
         permission.WRITE_EXTERNAL_STORAGE)
-        return result == PackageManager.PERMISSION_GRANTED
+//        val resultState = ActivityCompat.checkSelfPermission(this, Manifest.
+//        permission.READ_PHONE_STATE)
+        return resultStorage == PackageManager.PERMISSION_GRANTED 
     }
 
     // 申请磁盘写入权限 的系统回调
