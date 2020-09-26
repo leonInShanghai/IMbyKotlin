@@ -1,8 +1,8 @@
-package com.bobo.imbykotlin
+package com.bobo.imbykotlin.ui.activity
 
-import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.TextView
+import com.bobo.imbykotlin.R
 import com.bobo.imbykotlin.contract.RegiseterContract
 import com.bobo.imbykotlin.presenter.RegisterPresenter
 import kotlinx.android.synthetic.main.activity_login.password
@@ -14,11 +14,12 @@ import org.jetbrains.anko.toast
  * Created by 公众号：IT波 on 2020/9/13 Copyright © Leon. All rights reserved.
  * Functions: 用户注册页面
  */
-class RegisterActivity :BaseActivity(), RegiseterContract.View {
+class RegisterActivity : BaseActivity(), RegiseterContract.View {
 
     val presenter = RegisterPresenter(this)
 
-    override fun getLayoutResId(): Int = R.layout.activity_register
+    override fun getLayoutResId(): Int =
+        R.layout.activity_register
 
     override fun init() {
         super.init()
@@ -98,4 +99,11 @@ class RegisterActivity :BaseActivity(), RegiseterContract.View {
         toast(R.string.register_failed)
     }
 
+    /**
+     * 由于用户已经存在 注册失败
+     */
+    override fun onUserExist() {
+        dissmissProgress()
+        toast(R.string.user_already_exist)
+    }
 }

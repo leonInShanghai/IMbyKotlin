@@ -1,12 +1,15 @@
-package com.bobo.imbykotlin
+package com.bobo.imbykotlin.ui.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
+import android.text.TextUtils
 import android.view.KeyEvent
 import android.widget.TextView
+import com.bobo.imbykotlin.R
 import com.bobo.imbykotlin.contract.LoginContract
 import com.bobo.imbykotlin.presenter.LoginPresenter
+import com.bobo.imbykotlin.utils.CacheUtils
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
@@ -21,6 +24,16 @@ class LoginActivity : BaseActivity(), LoginContract.View {
 
     override fun init() {
         super.init()
+
+        // 本地持久化保存 解决（弥补）环信有时候返回登录状态不正确的bug 只要用户没有退出咱就要保持登录状态
+        if (!TextUtils.isEmpty(CacheUtils.getString("userName")) && !TextUtils.isEmpty(
+                CacheUtils.getString("password"))) {
+            // 如果本地缓存的账号密码不为空 (只有退出了才为空)
+            userName.setText(CacheUtils.getString("userName"))
+            password.setText(CacheUtils.getString("password"))
+            // 自动登录 弥补环信时候返回登录状态不正确的bug
+            login()
+        }
 
         // 用户点击了新用户按钮 跳转到注册页面
         newUser.setOnClickListener {
@@ -92,7 +105,8 @@ class LoginActivity : BaseActivity(), LoginContract.View {
         login()
     }
 
-    override fun getLayoutResId(): Int = R.layout.activity_login;
+    override fun getLayoutResId(): Int =
+        R.layout.activity_login;
 
     override fun onUserNameError() {
         userName.error = getString(R.string.user_name_error)

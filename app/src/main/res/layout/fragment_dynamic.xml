@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/header"/>
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        android:src="@mipmap/logo"
+        android:layout_gravity="center_horizontal"/>
+
+    <!-- 退出按钮 -->
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textAllCaps="false"
+        android:background="@drawable/logout_btn"
+        android:text="@string/my_logout"
+        android:textSize="22sp"
+        android:textColor="@android:color/white"/>
+
+</LinearLayout>

@@ -4,6 +4,7 @@ import com.bobo.imbykotlin.adapter.EMCallBackAdapter
 import com.bobo.imbykotlin.contract.LoginContract
 import com.bobo.imbykotlin.extentiors.isValidPassword
 import com.bobo.imbykotlin.extentiors.isValidUserName
+import com.bobo.imbykotlin.utils.CacheUtils
 import com.hyphenate.EMCallBack
 import com.hyphenate.chat.EMClient
 
@@ -46,6 +47,9 @@ class LoginPresenter(val view: LoginContract.View): LoginContract.Presenter {
 
                 // 转到主线程 登录成功
                 uiThread {
+                    // 本地持久化保存 解决（弥补）环信 有时候返回登录状态不正确的bug
+                    CacheUtils.putString("userName",userName)
+                    CacheUtils.putString("password",password)
                     view.onLoggedInSuccess()
                 }
             }

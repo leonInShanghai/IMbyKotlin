@@ -1,4 +1,4 @@
-<resources>
+<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">波聊</string>
     <string name="user_name_error">请输入正确的手机号</string>
     <string name="password_error">请输入正确的密码</string>
@@ -15,4 +15,12 @@
     <string name="cofirm_password_error">两次输入的密码不一致</string>
     <string name="register_success">注册成功</string>
     <string name="register_failed">注册失败</string>
+    <string name="user_already_exist">用户已经存在</string>
+
+    <string name="message">消息</string>
+    <string name="contact">联系人</string>
+    <string name="dynamic">设置</string>
+    <string name="my_logout">退出:%s</string>
+    <string name="logout_failed">退出失败</string>
+    <string name="logout_success">退出成功</string>
 </resources>

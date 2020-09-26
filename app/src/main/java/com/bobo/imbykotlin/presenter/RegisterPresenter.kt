@@ -67,7 +67,11 @@ class RegisterPresenter(val view: RegiseterContract.View) : RegiseterContract.Pr
 //                        registerEaseMod(userName, password)
 //                    } else {
 //                        // Bmob注册失败 通知view注册失败
-//                        view.onRegisterFailed()
+//                        if (e.errorCode == 202) {
+//                            view.onUserExist()
+//                        } else {
+//                            view.onRegisterFailed()
+//                        }
 //                    }
 //                }
 //            }
@@ -77,7 +81,7 @@ class RegisterPresenter(val view: RegiseterContract.View) : RegiseterContract.Pr
     // 注册好Bmob再注册环信
     private fun registerEaseMod(userName: String, password: String) {
 
-        // 环信的需要到子线程去操作注册业务逻辑
+        // 环信的需要到子线程去操作注册业务逻辑 方法二：
 //        object : Thread() {
 //            override fun run() {
 //                try {
@@ -98,9 +102,7 @@ class RegisterPresenter(val view: RegiseterContract.View) : RegiseterContract.Pr
 //            }
 //        }.start()
 
-
-
-        // 环信的需要到子线程去操作注册业务逻辑
+        // 环信的需要到子线程去操作注册业务逻辑  方法一：
         doAsync {
             try {
                 // 在子线程注册用户
@@ -114,7 +116,13 @@ class RegisterPresenter(val view: RegiseterContract.View) : RegiseterContract.Pr
                 // 进了异常就是注册失败，切换到主线程通知view注册失败了
                 e.printStackTrace()
                 uiThread {
-                    view.onRegisterFailed()
+                    if (e.errorCode == 203) {
+                        // 用户已经存在
+                        view.onUserExist()
+                    } else {
+                        // 注册失败
+                        view.onRegisterFailed()
+                    }
                 }
             }
         }

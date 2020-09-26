@@ -16,4 +16,12 @@
     <string name="cofirm_password_error">The two passwords are not the same</string>
     <string name="register_success">registered successfully</string>
     <string name="register_failed">registered failed</string>
+    <string name="user_already_exist">Users already exist</string>
+
+    <string name="message">Message</string>
+    <string name="contact">Contact</string>
+    <string name="dynamic">Settings</string>
+    <string name="my_logout">Logout:%s</string>
+    <string name="logout_failed">Logout failure</string>
+    <string name="logout_success">Logout success</string>
 </resources>

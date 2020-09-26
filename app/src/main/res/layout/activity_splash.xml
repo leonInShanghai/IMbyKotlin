@@ -3,13 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity">
+    tools:context=".ui.activity.SplashActivity">
 
-    <ImageView
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_funchat"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"/>
+<!-- android:windowBackground:@drawable/layer_launch 已经设置背景这里不用重复设置  -->
+    <!-- android:scaleType="centerCrop" -->
+<!--    <ImageView-->
+<!--        android:scaleType="fitXY"-->
+<!--        android:src="@mipmap/ic_funchat"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent" />-->
 
 </RelativeLayout>

@@ -1,6 +1,7 @@
-package com.bobo.imbykotlin
+package com.bobo.imbykotlin.ui.activity
 
 import android.os.Handler
+import com.bobo.imbykotlin.R
 import com.bobo.imbykotlin.contract.SplashContract
 import com.bobo.imbykotlin.presenter.SplashPresenter
 import org.jetbrains.anko.startActivity
@@ -28,7 +29,8 @@ class SplashActivity : BaseActivity(), SplashContract.View{
     }
 
     // kotlin语法只有一行的时候可以省略大括号但是要用等号
-    override fun getLayoutResId(): Int = R.layout.activity_splash
+    override fun getLayoutResId(): Int =
+        R.layout.activity_splash
 
     // 没有登录的业务UI的处理
     override fun onNotLoggedIn() {

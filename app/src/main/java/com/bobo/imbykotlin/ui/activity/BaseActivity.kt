@@ -1,4 +1,4 @@
-package com.bobo.imbykotlin
+package com.bobo.imbykotlin.ui.activity
 
 import android.app.ProgressDialog
 import android.content.Context

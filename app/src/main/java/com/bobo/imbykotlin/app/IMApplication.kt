@@ -1,6 +1,7 @@
 package com.bobo.imbykotlin.app
 
 import android.app.Application
+import android.content.Context
 import com.hyphenate.chat.BuildConfig
 import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMOptions
@@ -13,8 +14,20 @@ import com.hyphenate.easeui.EaseUI
  */
 class IMApplication : Application() {
 
+    /**
+     * 获取全局上下文方法
+     */
+    companion object {
+        var _context:Application? = null
+        fun getContext():Context{
+            return _context!!
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
+
+        _context = this
 
         // 注释原因测试代码
         // EaseUI.getInstance().init(applicationContext, null);
@@ -32,4 +45,5 @@ class IMApplication : Application() {
         // 实例化bmob 第一个参数是上下文 第二个参数是Application ID:
         // Bmob.initialize(applicationContext,"863b889ac932802a9adb395d0fe47024")
     }
+
 }

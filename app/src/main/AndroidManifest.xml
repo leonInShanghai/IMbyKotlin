@@ -45,7 +45,7 @@
 
         <!-- 启动页 -->
         <activity
-            android:name=".SplashActivity"
+            android:name=".ui.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.FullScreen">
             <intent-filter>
@@ -56,14 +56,14 @@
         </activity>
         <!-- 登录页 -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:screenOrientation="portrait" />
         <!-- 首页 -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:screenOrientation="portrait" />
         <!-- 注册页 -->
-        <activity android:name=".RegisterActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activity.RegisterActivity" android:screenOrientation="portrait"/>
         <!-- 设置环信应用的AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"

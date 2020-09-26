@@ -45,6 +45,11 @@ interface RegiseterContract {
          * 注册失败
          */
         fun onRegisterFailed()
+
+        /**
+         * 由于用户已经存在 注册失败
+         */
+        fun onUserExist()
     }
 
 }

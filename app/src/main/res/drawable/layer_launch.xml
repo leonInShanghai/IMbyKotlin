@@ -1,0 +1,10 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:scaleType="fitXY">
+        <bitmap android:src="@mipmap/ic_funchat"
+            android:tileMode="disabled"
+            android:scaleType="fitXY"
+            android:filter="true"/>
+    </item>
+
+</layer-list>

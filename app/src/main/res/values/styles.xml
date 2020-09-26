@@ -9,7 +9,10 @@
 
     <style name="AppTheme.FullScreen" parent="AppTheme">
         <!-- Customize your theme here. -->
-        <item name="android:windowFullscreen">true</item>
+        <item name="colorPrimary">@color/mainColor</item>
+        <item name="colorPrimaryDark">@color/mainColor</item>
+        <item name="colorAccent">@color/mainColor</item>
+        <item name="android:windowBackground">@drawable/layer_launch</item>
     </style>
 
 </resources>
