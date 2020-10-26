@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="mainColor">#43f919</color>
+
+    <color name="qq_gray">#999999</color>
+    <color name="qq_section_text_gray">#999999</color>
 </resources>

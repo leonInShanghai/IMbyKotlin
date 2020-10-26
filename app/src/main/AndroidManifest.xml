@@ -27,18 +27,16 @@
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-    <!-- 如果你在完成拍照之后需要把照片操作读写权限： -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- 如果你在完成拍照之后需要把照片操作读写权限： -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".app.IMApplication"
-        android:networkSecurityConfig="@xml/network_security_config"
-
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -53,30 +51,29 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- 登录页 -->
+        </activity> <!-- 登录页 -->
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:screenOrientation="portrait" />
-        <!-- 首页 -->
+            android:screenOrientation="portrait" /> <!-- 首页 -->
         <activity
             android:name=".ui.activity.MainActivity"
-            android:screenOrientation="portrait" />
-        <!-- 注册页 -->
-        <activity android:name=".ui.activity.RegisterActivity" android:screenOrientation="portrait"/>
-        <!-- 设置环信应用的AppKey -->
+            android:screenOrientation="portrait" /> <!-- 注册页 -->
+        <!-- 聊天页 -->
+        <activity android:name=".ui.activity.ChatActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.activity.RegisterActivity"
+            android:screenOrientation="portrait" /> <!-- 设置环信应用的AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
-            android:value="leon88888888#bo-im-chat" />
-        <!-- 声明SDK所需的service SDK核心功能 -->
+            android:value="leon88888888#bo-im-chat" /> <!-- 声明SDK所需的service SDK核心功能 -->
         <service
             android:name="com.hyphenate.chat.EMChatService"
             android:exported="true" />
         <service
             android:name="com.hyphenate.chat.EMJobService"
             android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-        <!-- 声明SDK所需的receiver -->
+            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- 声明SDK所需的receiver -->
         <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />

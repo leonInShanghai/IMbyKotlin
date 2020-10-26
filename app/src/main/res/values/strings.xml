@@ -1,6 +1,6 @@
-<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">波聊</string>
-    <string name="user_name_error">请输入正确的手机号</string>
+    <string name="user_name_error">请输入正确的用户名</string>
     <string name="password_error">请输入正确的密码</string>
     <string name="logging">登录中...</string>
     <string name="login_failed">登录失败</string>
@@ -23,4 +23,11 @@
     <string name="my_logout">退出:%s</string>
     <string name="logout_failed">退出失败</string>
     <string name="logout_success">退出成功</string>
+    <string name="load_contacts_failed">加载联系人失败</string>
+    <string name="delete_frend_title">删除好友</string>
+    <string name="delete_frend_menssage">是否要删除%s</string>
+    <string name="cancle">取消</string>
+    <string name="confirm">确认</string>
+    <string name="delete_friend_successs">删除好友成功</string>
+    <string name="delete_friend_failed">删除好友失败</string>
 </resources>

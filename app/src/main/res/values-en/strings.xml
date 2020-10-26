@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BoChat</string>
-    <string name="user_name_error">Please enter the mobile phone number</string>
+    <string name="user_name_error">Please enter the correct user name</string>
     <string name="password_error">Please enter the correct password</string>
     <string name="logging">Logging in...</string>
     <string name="login_failed">Login failed</string>
@@ -24,4 +24,11 @@
     <string name="my_logout">Logout:%s</string>
     <string name="logout_failed">Logout failure</string>
     <string name="logout_success">Logout success</string>
+    <string name="load_contacts_failed">Load contacts failed</string>
+    <string name="delete_frend_title">Delete contact</string>
+    <string name="delete_frend_menssage">Do you want to delete%s</string>
+    <string name="cancle">Cancle</string>
+    <string name="confirm">Confirm</string>
+    <string name="delete_friend_successs">Friend deleted successfully</string>
+    <string name="delete_friend_failed">Failed to delete friend</string>
 </resources>

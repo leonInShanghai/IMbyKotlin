@@ -22,11 +22,12 @@
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
-<!--        <com.bobo.imbykotlin.widget.SlideBar-->
-<!--            android:id="@+id/slideBar"-->
-<!--            android:layout_width="20edp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_gravity="right"/>-->
+        <com.bobo.imbykotlin.widget.SlideBar
+            android:id="@+id/slideBar"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:background="#ff0000"
+            android:layout_gravity="right"/>
 
         <TextView
             android:id="@+id/section"
