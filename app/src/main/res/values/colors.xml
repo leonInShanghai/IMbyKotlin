@@ -7,4 +7,5 @@
 
     <color name="qq_gray">#999999</color>
     <color name="qq_section_text_gray">#999999</color>
+    <color name="half_transparent">#33000000</color>
 </resources>

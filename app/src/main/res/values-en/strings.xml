@@ -31,4 +31,8 @@
     <string name="confirm">Confirm</string>
     <string name="delete_friend_successs">Friend deleted successfully</string>
     <string name="delete_friend_failed">Failed to delete friend</string>
+    <string name="add">Add</string>
+    <string name="added">Added</string>
+    <string name="search_failed">Please enter the correct user name</string>
+    <string name="search_success">Search success</string>
 </resources>

@@ -2,8 +2,11 @@ package com.bobo.imbykotlin.widget
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.Log
+import android.view.MotionEvent
 import com.bobo.imbykotlin.R
 import org.jetbrains.anko.sp
 import android.view.View as View
@@ -17,6 +20,7 @@ class SlideBar(context: Context?, attrs: AttributeSet? = null) : View(context, a
     var sectionsHeight = 0f;
     var paint = Paint()
     var textBaseline = 0f
+    var onSectionChangeListener: OnSectionChangeListener? =null
 
     // 伴生对象
     companion object {
@@ -69,4 +73,80 @@ class SlideBar(context: Context?, attrs: AttributeSet? = null) : View(context, a
             baseLine +=  sectionsHeight
         }
     }
+
+    /**
+     * 处理触摸事件
+     */
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+
+        when (event.action) {
+
+            // 当用户按下
+            MotionEvent.ACTION_DOWN -> {
+
+                // 设置背景为半透明
+                setBackgroundResource(R.drawable.bg_slide_bar)
+
+                // 找到用户点击的字母
+                val index = getTouchIndex(event)
+                val firstLetter = SECTIONS[index]
+                Log.e("SlideBar", "firstLetter: $firstLetter")
+                onSectionChangeListener?.onSectionChange(firstLetter)
+            }
+
+            // 当用户手指在SlideBar上划动
+            MotionEvent.ACTION_MOVE -> {
+                // 找到用户点击的字母
+                val index = getTouchIndex(event)
+
+                val firstLetter = SECTIONS[index]
+                Log.e("SlideBar", "firstLetter: $firstLetter")
+                onSectionChangeListener?.onSectionChange(firstLetter)
+            }
+
+            // 用户手松开颜色为透明
+            MotionEvent.ACTION_UP -> {
+                setBackgroundColor(Color.TRANSPARENT)
+                onSectionChangeListener?.onSectionFinish()
+            }
+        }
+
+        // 一定要返回true消费掉事件否则会继续往下传递
+        return true
+    }
+
+    /**
+     * 根据用户点击的位置获取对应的点击字母索引
+     */
+    private fun getTouchIndex(event: MotionEvent): Int {
+
+        // 当前字母的索引等于当前的y值除以一个字母所占的高度
+        var index = (event.y / sectionsHeight).toInt()
+
+        // 数组越界的检查
+        if (index < 0) {
+            index = 0
+        } else if (index >= SECTIONS.size) {
+            index = SECTIONS.size - 1
+        }
+
+        return index
+    }
+
+    /**
+     * 点击事件回调接口
+     */
+    interface OnSectionChangeListener {
+
+        /**
+         * 用户按下了某个字母
+         */
+        fun onSectionChange(firstLetter: String)
+
+        /**
+         * 划动结束的回调
+         */
+        fun onSectionFinish()
+    }
+
 }

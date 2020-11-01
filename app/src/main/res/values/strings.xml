@@ -30,4 +30,8 @@
     <string name="confirm">确认</string>
     <string name="delete_friend_successs">删除好友成功</string>
     <string name="delete_friend_failed">删除好友失败</string>
+    <string name="add">添加</string>
+    <string name="added">已添加</string>
+    <string name="search_failed">请输入正确的用户名</string>
+    <string name="search_success">搜索成功</string>
 </resources>

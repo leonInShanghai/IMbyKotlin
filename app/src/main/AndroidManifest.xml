@@ -40,7 +40,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <!-- 启动页 -->
         <activity
             android:name=".ui.activity.SplashActivity"
@@ -57,13 +56,18 @@
             android:screenOrientation="portrait" /> <!-- 首页 -->
         <activity
             android:name=".ui.activity.MainActivity"
-            android:screenOrientation="portrait" /> <!-- 注册页 -->
+            android:screenOrientation="portrait" />
         <!-- 聊天页 -->
-        <activity android:name=".ui.activity.ChatActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.activity.ChatActivity"
+            android:screenOrientation="portrait" />
+        <!-- 注册页 -->
         <activity
             android:name=".ui.activity.RegisterActivity"
-            android:screenOrientation="portrait" /> <!-- 设置环信应用的AppKey -->
+            android:screenOrientation="portrait" />
+        <!-- 添加好友页 -->
+        <activity android:name=".ui.activity.AddFrinedActivity" android:screenOrientation="portrait"/>
+        <!-- 设置环信应用的AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
             android:value="leon88888888#bo-im-chat" /> <!-- 声明SDK所需的service SDK核心功能 -->

@@ -36,6 +36,7 @@ class LoginPresenter(val view: LoginContract.View): LoginContract.Presenter {
 
     // 登录到环信
     private fun loginEaseMob(userName: String, password: String) {
+
         EMClient.getInstance().login(userName, password, object : EMCallBackAdapter() {
 
             override fun onSuccess() {

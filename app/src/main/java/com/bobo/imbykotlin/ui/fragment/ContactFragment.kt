@@ -8,9 +8,13 @@ import com.bobo.imbykotlin.adapter.ContactListAdapter
 import com.bobo.imbykotlin.adapter.EMContactListenerAdapter
 import com.bobo.imbykotlin.contract.ContactContract
 import com.bobo.imbykotlin.presenter.ContactPresenter
+import com.bobo.imbykotlin.ui.activity.AddFrinedActivity
+import com.bobo.imbykotlin.widget.SlideBar
 import com.hyphenate.chat.*
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import kotlinx.android.synthetic.main.header.*
+import kotlinx.android.synthetic.main.view_contact_item.*
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 /**
@@ -34,15 +38,20 @@ class ContactFragment: BaseFragment() , ContactContract.View {
         // 添加好友按钮在此时显示
         add.visibility = View.VISIBLE
 
-        // 设置R.color.mainColor 不起作用 直接设置颜色值
-        // swipRefreshLayout.setColorSchemeColors(0x43f919)
+        add.setOnClickListener {
+            // 跳转到添加好友界面
+            context!!.startActivity<AddFrinedActivity>()
+        }
+
+        // 设置下拉时出现的箭头颜色
+        // swipRefreshLayout.setColorSchemeResources(R.color.mainColor)
         // 一进来本页面就自动刷新一次
         // swipRefreshLayout.isRefreshing = true
 
         // 给swipRefreshLayout设置属性简化写法
         swipRefreshLayout.apply {
-            // 设置R.color.mainColor 不起作用 直接设置颜色值
-            setColorSchemeColors(0x43f919)
+            // 设置下拉时出现的箭头颜色
+            setColorSchemeResources(R.color.mainColor)
             // 一进来本页面就自动刷新一次
             isRefreshing = true
 
@@ -71,9 +80,56 @@ class ContactFragment: BaseFragment() , ContactContract.View {
             }
         })
 
+        slideBar.onSectionChangeListener = object : SlideBar.OnSectionChangeListener {
+
+            override fun onSectionChange(firstLetter: String) {
+                // 显示字母
+                section.visibility = View.VISIBLE
+                section.text = firstLetter
+
+                // recyclerView滚动到对应的位置
+                if (firstLetter.equals("#")){
+                    recyclerView.smoothScrollToPosition(0)
+                } else {
+                    // 因为0代表没有找到对应的item索引所以必须大于0
+                    if (getPosition(firstLetter) > 0){
+                        recyclerView.smoothScrollToPosition(getPosition(firstLetter))
+                    }
+                }
+            }
+
+            override fun onSectionFinish() {
+                // 隐藏字母
+                section.visibility = View.GONE
+            }
+
+        }
+
         // 加载联系人列表
         presenter.loadContacts()
     }
+
+    /**
+     * 根据字母获得对应的索引 这个写的不好
+     */
+    // private fun getPosition(firstLetter: String): Int = presenter.contactListItems.binarySearch {
+    //         contactListItem ->  contactListItem.firstLetter.minus(firstLetter[0])
+    //     }
+
+    /**
+     * 根据字母获得对应的索引
+     */
+    private fun getPosition(firstLetter: String): Int {
+        val size = presenter.contactListItems.size - 1
+        for (i in 0..size){
+            val item = presenter.contactListItems.get(i)
+            if (item.showFirstLetter && item.firstLetter.toString().equals(firstLetter)) {
+                return i
+            }
+        }
+        return 0
+    }
+
 
     /**
      * 联系人列表加载失败
