@@ -6,6 +6,7 @@ import com.hyphenate.chat.BuildConfig
 import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMOptions
 import com.hyphenate.easeui.EaseUI
+import java.time.Instant
 
 
 /**
@@ -18,16 +19,17 @@ class IMApplication : Application() {
      * 获取全局上下文方法
      */
     companion object {
-        var _context:Application? = null
-        fun getContext():Context{
-            return _context!!
-        }
+        lateinit var instant: IMApplication
+        // var instant:Application? = null
+        // fun getContext():Context{
+        //     return instant!!
+        // }
     }
 
     override fun onCreate() {
         super.onCreate()
 
-        _context = this
+        instant = this
 
         // 注释原因测试代码
         // EaseUI.getInstance().init(applicationContext, null);

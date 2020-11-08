@@ -2,6 +2,7 @@ package com.bobo.imbykotlin.ui.activity
 
 import android.support.v7.widget.LinearLayoutManager
 import android.view.KeyEvent
+import android.view.View
 import android.widget.TextView
 import com.bobo.imbykotlin.R
 import com.bobo.imbykotlin.contract.AddFriendContract
@@ -23,6 +24,14 @@ class AddFrinedActivity : BaseActivity(), AddFriendContract.View {
 
     override fun init() {
         super.init()
+        // ---------------新增↓------------------------
+        // 让左上角的返回按钮可见
+        back.visibility = View.VISIBLE
+        // 用户点击了左上角的返回按钮-返回到上一页
+        back.setOnClickListener {
+            finish()
+        }
+        // ----------------新增↑-----------------------
         headerTitle.text = getString(R.string.add_friend)
 
         recyclerView.apply {

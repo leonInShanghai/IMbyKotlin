@@ -34,4 +34,9 @@
     <string name="added">已添加</string>
     <string name="search_failed">请输入正确的用户名</string>
     <string name="search_success">搜索成功</string>
+
+    <string name="send_add_friend_success">发送好友请求成功</string>
+    <string name="send_add_friend_failed">发送好友请求失败</string>
+    <string name="send">发送</string>
+    <string name="chat_title">与%s聊天中</string>
 </resources>

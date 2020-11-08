@@ -26,23 +26,77 @@ class ContactFragment: BaseFragment() , ContactContract.View {
     // 实例化presenter
     val presenter = ContactPresenter(this)
 
+    val contactListener = object : EMContactListenerAdapter() {
+
+        /**
+         * 当删除用户成功后环信回调
+         */
+        override fun onContactDeleted(p0: String?) {
+            // 从新获取联系人列表集合
+            presenter.loadContacts()
+        }
+
+        /**
+         * 当新增一个好友环信回调
+         */
+        override fun onContactAdded(p0: String?) {
+            // 从新获取联系人列表集合
+            presenter.loadContacts()
+        }
+    }
+
     override fun getLayoutResId(): Int = R.layout.fragment_contacts;
 
     @SuppressLint("ResourceAsColor")
     override fun init() {
         super.init()
+        initHeader()
+        initSwipeRefreshLayout()
+        initRecyclerView()
+        // 联系人变化监听器（添加好友删除好友等）
+        EMClient.getInstance().contactManager().setContactListener(contactListener)
+        initSlideBar()
 
-        // 设置标题
-        headerTitle.text = getString(R.string.contact)
+        // 加载联系人列表
+        presenter.loadContacts()
+    }
 
-        // 添加好友按钮在此时显示
-        add.visibility = View.VISIBLE
+    private fun initSlideBar() {
+        slideBar.onSectionChangeListener = object : SlideBar.OnSectionChangeListener {
 
-        add.setOnClickListener {
-            // 跳转到添加好友界面
-            context!!.startActivity<AddFrinedActivity>()
+            override fun onSectionChange(firstLetter: String) {
+                // 显示字母
+                section.visibility = View.VISIBLE
+                section.text = firstLetter
+
+                // recyclerView滚动到对应的位置
+                if (firstLetter.equals("#")) {
+                    recyclerView.smoothScrollToPosition(0)
+                } else {
+                    // 因为0代表没有找到对应的item索引所以必须大于0
+                    if (getPosition(firstLetter) > 0) {
+                        recyclerView.smoothScrollToPosition(getPosition(firstLetter))
+                    }
+                }
+            }
+
+            override fun onSectionFinish() {
+                // 隐藏字母
+                section.visibility = View.GONE
+            }
         }
+    }
 
+    private fun initRecyclerView() {
+        // 给recyclerView设置属性
+        recyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = ContactListAdapter(context, presenter.contactListItems)
+        }
+    }
+
+    private fun initSwipeRefreshLayout() {
         // 设置下拉时出现的箭头颜色
         // swipRefreshLayout.setColorSchemeResources(R.color.mainColor)
         // 一进来本页面就自动刷新一次
@@ -60,53 +114,19 @@ class ContactFragment: BaseFragment() , ContactContract.View {
                 presenter.loadContacts()
             }
         }
+    }
 
-        // 给recyclerView设置属性
-        recyclerView.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = ContactListAdapter(context, presenter.contactListItems)
+    private fun initHeader() {
+        // 设置标题
+        headerTitle.text = getString(R.string.contact)
+
+        // 添加好友按钮在此时显示
+        add.visibility = View.VISIBLE
+
+        add.setOnClickListener {
+            // 跳转到添加好友界面
+            context!!.startActivity<AddFrinedActivity>()
         }
-
-        // 联系人变化监听器（添加好友删除好友）
-        EMClient.getInstance().contactManager().setContactListener(object : EMContactListenerAdapter() {
-
-            /**
-             * 当删除用户成功后环信回调
-             */
-            override fun onContactDeleted(p0: String?) {
-                // 从新获取联系人列表集合
-                presenter.loadContacts()
-            }
-        })
-
-        slideBar.onSectionChangeListener = object : SlideBar.OnSectionChangeListener {
-
-            override fun onSectionChange(firstLetter: String) {
-                // 显示字母
-                section.visibility = View.VISIBLE
-                section.text = firstLetter
-
-                // recyclerView滚动到对应的位置
-                if (firstLetter.equals("#")){
-                    recyclerView.smoothScrollToPosition(0)
-                } else {
-                    // 因为0代表没有找到对应的item索引所以必须大于0
-                    if (getPosition(firstLetter) > 0){
-                        recyclerView.smoothScrollToPosition(getPosition(firstLetter))
-                    }
-                }
-            }
-
-            override fun onSectionFinish() {
-                // 隐藏字母
-                section.visibility = View.GONE
-            }
-
-        }
-
-        // 加载联系人列表
-        presenter.loadContacts()
     }
 
     /**
@@ -146,10 +166,23 @@ class ContactFragment: BaseFragment() , ContactContract.View {
      * 联系人列表加载成功
      */
     override fun onLoadContactsSuccess() {
-        // 加载成功后刷新图标要隐藏
-        swipRefreshLayout.isRefreshing = false
 
-        // recyclerview更新列表
-        recyclerView.adapter.notifyDataSetChanged()
+        // java.lang.IllegalStateException: swipRefreshLayout must not be null
+        if (swipRefreshLayout != null){
+            // 加载成功后刷新图标要隐藏
+            swipRefreshLayout.isRefreshing = false
+        }
+
+        // java.lang.IllegalStateException: recyclerView must not be null
+        if (recyclerView != null) {
+            // recyclerview更新列表
+            recyclerView.adapter.notifyDataSetChanged()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // 移除联系人变化监听器（添加好友删除好友）
+        EMClient.getInstance().contactManager().removeContactListener(contactListener)
     }
 }

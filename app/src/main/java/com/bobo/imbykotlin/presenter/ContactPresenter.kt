@@ -3,6 +3,8 @@ package com.bobo.imbykotlin.presenter
 import android.util.Log
 import com.bobo.imbykotlin.contract.ContactContract
 import com.bobo.imbykotlin.data.ContactListItem
+import com.bobo.imbykotlin.data.db.Contact
+import com.bobo.imbykotlin.data.db.IMDatabase
 import com.hyphenate.chat.EMClient
 import com.hyphenate.exceptions.HyphenateException
 import org.jetbrains.anko.doAsync
@@ -27,6 +29,9 @@ class ContactPresenter(val view : ContactContract.View) : ContactContract.Presen
             // 再次加载数据，先清空集合
             contactListItems.clear()
 
+            // 清空数据库
+            IMDatabase.instance.deleteAllContacts()
+
             try {
                 val usernames = EMClient.getInstance().contactManager().allContactsFromServer
 
@@ -38,6 +43,11 @@ class ContactPresenter(val view : ContactContract.View) : ContactContract.Presen
                     val showFirstLetter = index == 0 || s[0] != usernames[index -1][0]
                     val contactListItem = ContactListItem(s, s[0].toUpperCase(), showFirstLetter)
                     contactListItems.add(contactListItem)
+
+                    val contact = Contact(mutableMapOf("name" to s))
+
+                    // 保存联系人到数据库
+                    IMDatabase.instance.saveContact(contact)
                 }
 
                 // 没有异常就是请求联系人成功 到主线程通知View层

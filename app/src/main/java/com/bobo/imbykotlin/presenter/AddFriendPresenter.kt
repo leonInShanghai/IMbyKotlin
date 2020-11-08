@@ -3,6 +3,7 @@ package com.bobo.imbykotlin.presenter
 import android.webkit.WebView.FindListener
 import com.bobo.imbykotlin.contract.AddFriendContract
 import com.bobo.imbykotlin.data.AddFriendItem
+import com.bobo.imbykotlin.data.db.IMDatabase
 import com.bobo.imbykotlin.extentiors.isValidUserName
 import com.hyphenate.chat.EMClient
 import java.text.SimpleDateFormat
@@ -46,14 +47,24 @@ class AddFriendPresenter(val view: AddFriendContract.View): AddFriendContract.Pr
         if (key.isValidUserName()) {
             // 这里写的是直接成功
 
+
+
             // 先清空数据
             addFriendItems.clear()
 
             // 处理数据
             val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
             val currentDate = sdf.format(Date())
-            val addFrientItem = AddFriendItem(key, currentDate, key.equals(EMClient.getInstance().currentUser))
+
+            // 本地sql语句查看用户是否已经存在
+            val aContacts = IMDatabase.instance.getContactsFromUserKey(key)
+
+            // 比对是否已经添加过好友或者是自己
+            var isAdded = aContacts.equals(key) || key.equals(EMClient.getInstance().currentUser);
+
+            val addFrientItem = AddFriendItem(key, currentDate, isAdded)
             addFriendItems.add(addFrientItem)
+
             view.onSearchSuccess()
         } else {
             // 由于用户名格式都不对 查找失败
