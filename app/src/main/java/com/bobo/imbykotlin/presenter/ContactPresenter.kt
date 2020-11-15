@@ -54,6 +54,7 @@ class ContactPresenter(val view : ContactContract.View) : ContactContract.Presen
                 uiThread {
                     view.onLoadContactsSuccess()
                     Log.d("ContactPresenter", "加载联系人成功" + usernames.size)
+                    Log.d("ContactPresenter", "线程" + Thread.currentThread().name)
                 }
 
             } catch (e: HyphenateException) {

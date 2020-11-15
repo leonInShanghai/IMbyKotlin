@@ -27,6 +27,7 @@
             android:layout_margin="8dp"
             android:layout_alignParentRight="true"/>
 
+        <!-- android:padding="5dp" -->
         <TextView
             android:id="@+id/sendMessage"
             android:layout_width="wrap_content"
@@ -34,13 +35,17 @@
             android:layout_toLeftOf="@+id/avatar"
             tools:text="hello"
             android:gravity="center"
-            android:background="@mipmap/send_msg_normal"
-            android:padding="5dp"/>
+            android:paddingRight="10dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="@mipmap/send_msg_normal" />
 
         <ImageView
+            android:id="@+id/sendMessageProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/loading"
+            android:src="@drawable/send_message_progres"
             android:layout_toLeftOf="@+id/sendMessage"
             android:layout_centerVertical="true"/>
 

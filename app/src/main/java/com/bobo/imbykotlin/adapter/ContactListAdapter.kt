@@ -83,7 +83,20 @@ class ContactListAdapter(val context: Context, val contactListItems: MutableList
         })
     }
 
-    override fun getItemCount(): Int = contactListItems.size
+
+    // 老的写法有数组越界的风险
+    // override fun getItemCount(): Int = contactListItems.size
+
+    // 新写法 RecyclerView: No adapter attached; skipping layout
+    override fun getItemCount(): Int {
+        // Inconsistency detected. Invalid view holder adapter positionViewHolder{61caefa
+        // position=8 id=-1, oldPos=-1, pLpos:-1 no parent}
+        if (contactListItems == null) {
+            return 0
+        }
+
+        return contactListItems.size
+    }
 
     class ContactListItemViewHoder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 

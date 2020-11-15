@@ -120,7 +120,7 @@ class LoginActivity : BaseActivity(), LoginContract.View {
      * 用户开始登录
      */
     override fun onStartLogin() {
-        // 开始登录弹出进度条（loading）
+        // 开始登录弹出进度条（send_message_progress）
         showProgress(getString(R.string.logging))
     }
 

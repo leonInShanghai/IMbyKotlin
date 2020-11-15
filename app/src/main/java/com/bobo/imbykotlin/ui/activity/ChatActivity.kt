@@ -1,14 +1,44 @@
 package com.bobo.imbykotlin.ui.activity
 
+import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.view.KeyEvent
 import android.view.View
+import android.widget.TextView
 import com.bobo.imbykotlin.R
+import com.bobo.imbykotlin.adapter.EMMessageListenerAdapter
+import com.bobo.imbykotlin.adapter.MessageListAdapter
+import com.bobo.imbykotlin.contract.ChatContract
+import com.bobo.imbykotlin.presenter.ChatPresenter
+import com.hyphenate.EMMessageListener
+import com.hyphenate.chat.EMClient
+import com.hyphenate.chat.EMMessage
 import kotlinx.android.synthetic.main.activity_chat.*
 import kotlinx.android.synthetic.main.header.*
+import org.jetbrains.anko.toast
 
-class ChatActivity : BaseActivity() {
+class ChatActivity : BaseActivity(), ChatContract.View{
 
+    val presenter = ChatPresenter(this)
+
+    lateinit var username: String;
+
+    val messageListener = object : EMMessageListenerAdapter() {
+
+        override fun onMessageReceived(p0: MutableList<EMMessage>?) {
+            // 收到新的消息 Received :收到的意识
+            presenter.addMessage(username, p0)
+
+            // 切换到主线程刷新UI
+            runOnUiThread {
+                recyclerView.adapter.notifyDataSetChanged()
+                scrollToBottom()
+            }
+        }
+
+    }
 
     override fun getLayoutResId(): Int = R.layout.activity_chat
 
@@ -20,6 +50,37 @@ class ChatActivity : BaseActivity() {
 
         // 初始化聊天输入框及发送按钮
         initEditText()
+
+        // 初始化RecyclerView
+        initRecyclerView()
+
+        // 设置接受到消息的监听器
+        EMClient.getInstance().chatManager().addMessageListener(messageListener)
+
+        send.setOnClickListener {
+            send()
+        }
+    }
+
+    private fun initRecyclerView() {
+        recyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = MessageListAdapter(context, presenter.messages)
+        }
+    }
+
+    // 发送消息
+    fun send() {
+        // 先隐藏键盘
+        hideSoftKeyboard()
+
+        // 注释原因这样写用户发送不了空格
+        // val message = edit.text.trim().toString()
+        // 用户可以发送空格
+        val message = edit.text.toString()
+        // 发送一条消息
+        presenter.sendMessage(username, message)
     }
 
     private fun initEditText() {
@@ -38,6 +99,13 @@ class ChatActivity : BaseActivity() {
             }
 
         })
+
+        edit.setOnEditorActionListener(object : TextView.OnEditorActionListener{
+            override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+                send()
+                return true
+            }
+        })
     }
 
     fun initHeader() {
@@ -49,12 +117,58 @@ class ChatActivity : BaseActivity() {
         }
 
         // 获取(上一页面传递过来)聊天的用户名
-        var username = intent.getStringExtra("username")
+        username = intent.getStringExtra("username")
+
+        var titleString = "";
         if (username.length > 5){
-           username = username.substring(0,5)
+            titleString = username.substring(0,5)
         }
-        val titleString = String.format(getString(R.string.chat_title), username)
+        titleString = String.format(getString(R.string.chat_title), username)
         // 设置标题与XX聊天中
         headerTitle.text = titleString
+    }
+
+    // 开始发送一条消息
+    override fun onStartSendMessage() {
+        // 通知RecyclerView刷新列表
+        recyclerView.adapter.notifyDataSetChanged()
+    }
+
+    // 发送消息成功
+    override fun onSendMessageSuccess() {
+        // 通知RecyclerView刷新列表
+        recyclerView.adapter.notifyDataSetChanged()
+        Log.e("ChatActivity", "onSendMessageSuccess");
+
+        // 清空编辑(输入框)框
+        edit.text.clear()
+
+        // 发送或接收到新消息的时候RecyclerView自动往上滚动
+        scrollToBottom()
+    }
+
+    // 收到或发送一条消息后 recyclerView自动往上滚动
+    private fun scrollToBottom() {
+        recyclerView.scrollToPosition(presenter.messages.size - 1)
+    }
+
+    // 发送消息失败
+    override fun onSendMessageFailed() {
+
+        // 告诉用户发送消息失败
+        toast(R.string.send_message_failed)
+
+        // 通知RecyclerView刷新列表
+        recyclerView.adapter.notifyDataSetChanged()
+    }
+
+    override fun onDestroy() {
+
+        if (messageListener != null) {
+            // 设置接受到消息的监听器不用的时候要移除
+            EMClient.getInstance().chatManager().removeMessageListener(messageListener)
+        }
+
+        super.onDestroy()
     }
 }

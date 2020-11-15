@@ -21,7 +21,7 @@ class LoginPresenter(val view: LoginContract.View): LoginContract.Presenter {
         if (userName.isValidUserName()) {
             // 用户名格式正确 继续校验密码
             if (password.isValidPassword()) {
-                // 密码也是格式正确 view开始登录(loading)
+                // 密码也是格式正确 view开始登录(send_message_progress)
                 view.onStartLogin()
 
                 // 开始登录到环信
