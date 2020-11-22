@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginBottom="2dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="10dp"
+            android:src="@mipmap/ease_default_icon"/>
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:textColor="@android:color/black"
+            android:layout_toRightOf="@id/avatar"
+            android:layout_alignTop="@id/avatar"
+            tools:text="text"/>
+
+        <TextView
+            android:id="@+id/lastMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="14sp"
+            android:textColor="@color/qq_gray"
+            android:layout_toRightOf="@+id/avatar"
+            android:layout_alignBottom="@id/avatar"
+            tools:text="Hello"/>
+
+        <TextView
+            android:id="@+id/timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/qq_gray"
+            tools:text="18:00"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:id="@+id/unreadCount"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:textSize="8sp"
+            android:textColor="@android:color/white"
+            android:padding="2dp"
+            android:layout_marginRight="10dp"
+            tools:text="99+"
+            android:background="@drawable/bg_unread_text"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@id/avatar"/>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

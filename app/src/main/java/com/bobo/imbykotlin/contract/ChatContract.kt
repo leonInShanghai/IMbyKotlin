@@ -19,6 +19,16 @@ interface ChatContract {
          * 收到消息 一条或多条
          */
         fun addMessage(username: String, p0: MutableList<EMMessage>?)
+
+        /**
+         * 加载历史聊天消息
+         */
+        fun loadMessages(username: String)
+
+        /**
+         * 加载更多历史聊天数据
+         */
+        fun loadMoreMessages(username: String)
     }
 
     interface View {
@@ -37,5 +47,15 @@ interface ChatContract {
          * 发送消息失败
          */
         fun onSendMessageFailed()
+
+        /**
+         * 加载历史聊天消息完成
+         */
+        fun onMessageLoaded()
+
+        /**
+         * 加载更多历史聊天数据成功
+         */
+        fun onMoreMessageLoaded(size: Int)
     }
 }

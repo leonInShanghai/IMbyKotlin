@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.bobo.imbykotlin.widget.ReceiveMessageItemView
 import com.bobo.imbykotlin.widget.SendMessageItemView
 import com.hyphenate.chat.EMMessage
+import com.hyphenate.util.DateUtils
 
 /**
  * Created by 公众号：IT波 on 2020/11/15 Copyright © Leon. All rights reserved.
@@ -30,15 +31,29 @@ class MessageListAdapter(val context: Context, val messages: List<EMMessage>) : 
         }
     }
 
+    // 根据不同的条目类型绑定不同的信息
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        // 根据不同的条目类型绑定不同的信息
+        // 是否显示时间戳（聊天时间）
+        val showTimestamp = isShowTimestamp(position)
         if (getItemViewType(position) == ITEM_TYPE_SEND_MESSAGE) {
             val sendMessageItemView = holder?.itemView as SendMessageItemView
-            sendMessageItemView.bindView(messages[position])
+            sendMessageItemView.bindView(messages[position], showTimestamp)
         } else {
             val receiveMessageItemView = holder?.itemView as ReceiveMessageItemView
-            receiveMessageItemView.bindView(messages[position])
+            receiveMessageItemView.bindView(messages[position], showTimestamp)
         }
+    }
+
+    // 是否显示聊天时间
+    private fun isShowTimestamp(position: Int): Boolean {
+        // 如果是第一条消息或者和前一条间隔时间比较长
+        var showTimestamp = true
+        if (position > 0){
+            // 环信提供工具类对比两条消息时间的间隔
+            showTimestamp = !DateUtils.isCloseEnough(messages[position].msgTime,
+                messages[position - 1].msgTime)
+        }
+        return showTimestamp
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {

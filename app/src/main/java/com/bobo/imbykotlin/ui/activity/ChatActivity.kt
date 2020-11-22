@@ -1,6 +1,7 @@
 package com.bobo.imbykotlin.ui.activity
 
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -12,7 +13,6 @@ import com.bobo.imbykotlin.adapter.EMMessageListenerAdapter
 import com.bobo.imbykotlin.adapter.MessageListAdapter
 import com.bobo.imbykotlin.contract.ChatContract
 import com.bobo.imbykotlin.presenter.ChatPresenter
-import com.hyphenate.EMMessageListener
 import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMMessage
 import kotlinx.android.synthetic.main.activity_chat.*
@@ -60,6 +60,7 @@ class ChatActivity : BaseActivity(), ChatContract.View{
         send.setOnClickListener {
             send()
         }
+        presenter.loadMessages(username)
     }
 
     private fun initRecyclerView() {
@@ -67,6 +68,24 @@ class ChatActivity : BaseActivity(), ChatContract.View{
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = MessageListAdapter(context, presenter.messages)
+
+            // RecyclerView滚动监听
+            addOnScrollListener(object: RecyclerView.OnScrollListener() {
+
+                // 当滚动状态发送改变时
+                override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                    // 当循环视图是一个空闲的状态（静止）
+                    // 检查是否划到顶部了,如果是就加载更多数据 IDLE:空闲的
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        val linearLayoutManager = layoutManager as LinearLayoutManager
+                        // 如果第一个可见的条目的位置是0，为划到了顶部
+                        if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
+                            // 加载更多（聊天历史）数据
+                            presenter.loadMoreMessages(username)
+                        }
+                    }
+                }
+            })
         }
     }
 
@@ -162,13 +181,25 @@ class ChatActivity : BaseActivity(), ChatContract.View{
         recyclerView.adapter.notifyDataSetChanged()
     }
 
-    override fun onDestroy() {
+    /**
+     * 加载历史聊天消息完成
+     */
+    override fun onMessageLoaded() {
+        // 刷新Recycerview
+        recyclerView.adapter.notifyDataSetChanged()
+        scrollToBottom()
+    }
 
+    override fun onMoreMessageLoaded(size: Int) {
+        recyclerView.adapter.notifyDataSetChanged()
+        recyclerView.scrollToPosition(size)
+    }
+
+    override fun onDestroy() {
         if (messageListener != null) {
             // 设置接受到消息的监听器不用的时候要移除
             EMClient.getInstance().chatManager().removeMessageListener(messageListener)
         }
-
         super.onDestroy()
     }
 }

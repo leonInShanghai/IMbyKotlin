@@ -2,15 +2,21 @@ package com.bobo.imbykotlin.presenter
 
 import com.bobo.imbykotlin.adapter.EMCallBackAdapter
 import com.bobo.imbykotlin.contract.ChatContract
-import com.hyphenate.EMCallBack
 import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMMessage
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 /**
  * Created by 公众号：IT波 on 2020/11/15 Copyright © Leon. All rights reserved.
  * Functions: 聊天界面的P层
  */
 class ChatPresenter(val view: ChatContract.View) : ChatContract.Presenter {
+
+    companion object {
+        // 常量下拉加载更多聊天数据的个数
+        val PAGE_SIZE = 6 // 10
+    }
 
     val messages = mutableListOf<EMMessage>()
 
@@ -59,6 +65,39 @@ class ChatPresenter(val view: ChatContract.View) : ChatContract.Presenter {
         // 更新消息为已读: 先获取跟联系人的会话，然后标记会话里面的消息为全部已读
         val conversation = EMClient.getInstance().chatManager().getConversation(username)
         conversation.markAllMessagesAsRead()
+    }
+
+    /**
+     * 加载历史聊天消息
+     */
+    override fun loadMessages(username: String) {
+        doAsync {
+            val conversation = EMClient.getInstance().chatManager().getConversation(username)
+            // 将加载的消息标记为已读  mark:标记
+            conversation.markAllMessagesAsRead()
+            messages.addAll(conversation.allMessages)
+
+            uiThread {
+                view.onMessageLoaded()
+            }
+        }
+    }
+
+    /**
+     * 加载更多历史聊天数据
+     */
+    override fun loadMoreMessages(username: String) {
+        doAsync {
+            val conversation = EMClient.getInstance().chatManager().getConversation(username)
+            val startMsgId = messages[0].msgId
+            // 从环信的数据库加载更多历史聊天记录
+            val loadMoreMsgFromDB = conversation.loadMoreMsgFromDB(startMsgId, PAGE_SIZE)
+            // 注意这里要加到集合的前面 第一个参数要传0
+            messages.addAll(0, loadMoreMsgFromDB)
+            uiThread {
+                view.onMoreMessageLoaded(loadMoreMsgFromDB.size)
+            }
+        }
     }
 
 }

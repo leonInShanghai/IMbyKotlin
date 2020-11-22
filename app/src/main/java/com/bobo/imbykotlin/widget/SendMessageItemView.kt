@@ -28,9 +28,9 @@ class SendMessageItemView(context: Context?, attrs: AttributeSet? = null) :
         View.inflate(context, R.layout.view_send_message_item, this)
     }
 
-    fun bindView(emMessage: EMMessage) {
+    fun bindView(emMessage: EMMessage, showTimestamp: Boolean) {
         // 更新时间戳
-        updateTimestamp(emMessage)
+        updateTimestamp(emMessage, showTimestamp)
 
         // 更新消息
         updateMessage(emMessage)
@@ -93,8 +93,13 @@ class SendMessageItemView(context: Context?, attrs: AttributeSet? = null) :
     }
 
     // 设置显示发送消息的时间
-    private fun updateTimestamp(emMessage: EMMessage) {
-        timestamp.text = DateUtils.getTimestampString(Date(emMessage.msgTime))
+    private fun updateTimestamp(emMessage: EMMessage, showTimestamp: Boolean) {
+        if (showTimestamp) {
+            timestamp.visibility = View.VISIBLE
+            timestamp.text = DateUtils.getTimestampString(Date(emMessage.msgTime))
+        } else {
+            timestamp.visibility = View.GONE
+        }
     }
 
 }
