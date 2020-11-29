@@ -9,7 +9,7 @@ import org.jetbrains.anko.db.*
  * Created by 公众号：IT波 on 2020/11/8 Copyright © Leon. All rights reserved.
  * Functions: 数据库操作类
  */
-class DatabaseHelper(ctx: Context = IMApplication.instant) : ManagedSQLiteOpenHelper(
+class DatabaseHelper(ctx: Context = IMApplication.instance) : ManagedSQLiteOpenHelper(
     ctx, NAME, null, VERSION) {
 
     override fun onCreate(p0: SQLiteDatabase?) {

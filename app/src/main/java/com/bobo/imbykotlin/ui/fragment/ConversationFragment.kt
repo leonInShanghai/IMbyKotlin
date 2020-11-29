@@ -27,7 +27,7 @@ class ConversationFragment: BaseFragment() {
 
         // Received 收到的意识
         override fun onMessageReceived(p0: MutableList<EMMessage>?) {
-
+            super.onMessageReceived(p0)
             // 收到新消息重新加载列表
             loadConversations()
         }
@@ -52,6 +52,7 @@ class ConversationFragment: BaseFragment() {
 
         EMClient.getInstance().chatManager().addMessageListener(messageListener)
 
+        // onResume已经调用不用重复调用
         // loadConversations()
     }
 
@@ -69,7 +70,6 @@ class ConversationFragment: BaseFragment() {
     }
 
     override fun onDestroy() {
-
         // 不用的时候移除消息监听器
         EMClient.getInstance().chatManager().removeMessageListener(messageListener)
         super.onDestroy()

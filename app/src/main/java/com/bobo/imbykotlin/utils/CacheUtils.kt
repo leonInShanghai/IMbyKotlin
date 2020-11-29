@@ -17,7 +17,7 @@ object CacheUtils {
      * @return
      */
     fun getBoolean(key: String?): Boolean {
-        val sp = IMApplication.instant.getSharedPreferences("imByKitlin", Context.MODE_PRIVATE)
+        val sp = IMApplication.instance.getSharedPreferences("imByKitlin", Context.MODE_PRIVATE)
         return sp.getBoolean(key, false)
     }
 
@@ -27,7 +27,7 @@ object CacheUtils {
      * @param value
      */
     fun putBoolean(key: String?, value: Boolean) {
-        val sp = IMApplication.instant.getSharedPreferences("imByKitlin", Context.MODE_PRIVATE)
+        val sp = IMApplication.instance.getSharedPreferences("imByKitlin", Context.MODE_PRIVATE)
         sp.edit().putBoolean(key, value).commit()
     }
 
@@ -38,7 +38,7 @@ object CacheUtils {
      * @param value
      */
     fun putString(key: String?, value: String) {
-        val sp = IMApplication.instant.getSharedPreferences("imByKitlin", Context.MODE_PRIVATE)
+        val sp = IMApplication.instance.getSharedPreferences("imByKitlin", Context.MODE_PRIVATE)
         sp.edit().putString(key, value).commit()
     }
 
@@ -48,7 +48,7 @@ object CacheUtils {
      * @return
      */
     fun getString(key: String?): String {
-        val sp = IMApplication.instant.getSharedPreferences("imByKitlin", Context.MODE_PRIVATE)
+        val sp = IMApplication.instance.getSharedPreferences("imByKitlin", Context.MODE_PRIVATE)
         return sp.getString(key, "")
     }
 }
