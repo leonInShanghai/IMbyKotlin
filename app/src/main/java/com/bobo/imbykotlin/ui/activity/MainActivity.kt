@@ -10,9 +10,13 @@ import com.bobo.imbykotlin.R
 import com.bobo.imbykotlin.adapter.EMMessageListenerAdapter
 import com.bobo.imbykotlin.app.IMApplication
 import com.bobo.imbykotlin.factory.FragmentFactory
+import com.bobo.imbykotlin.utils.CacheUtils
+import com.hyphenate.EMConnectionListener
+import com.hyphenate.EMError
 import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMMessage
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.startActivity
 
 
 /**
@@ -50,6 +54,25 @@ class MainActivity : BaseActivity() {
 
             // 添加消息监听器
             EMClient.getInstance().chatManager().addMessageListener(messageListener)
+            // 监听用户在其他设备上登录后退出
+            EMClient.getInstance().addConnectionListener(object : EMConnectionListener {
+                override fun onConnected() {
+
+                }
+
+                override fun onDisconnected(p0: Int) {
+                    // 判断用户是否在其他地方登录
+                    if (p0 == EMError.USER_LOGIN_ANOTHER_DEVICE) {
+                        // 用户在其他设备上登录 跳转到登录页
+                        startActivity<LoginActivity>()
+                        // 本地持久化保存 解决（弥补）环信有时候返回登录状态不正确的bug
+                        CacheUtils.putString("userName", "")
+                        CacheUtils.putString("password", "")
+                        finish()
+                    }
+                }
+
+            })
         }
     }
 

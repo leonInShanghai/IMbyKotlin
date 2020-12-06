@@ -1,19 +1,20 @@
 package com.bobo.imbykotlin.app
 
 import android.annotation.SuppressLint
-import android.app.ActivityManager
+import android.app.*
 import android.app.ActivityManager.RunningTaskInfo
-import android.app.Application
 import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.media.AudioManager
 import android.media.SoundPool
+import android.net.Uri
 import android.util.Log
 import com.bobo.imbykotlin.R
 import com.bobo.imbykotlin.adapter.EMMessageListenerAdapter
-import com.hyphenate.chat.BuildConfig
-import com.hyphenate.chat.EMClient
-import com.hyphenate.chat.EMMessage
-import com.hyphenate.chat.EMOptions
+import com.bobo.imbykotlin.ui.activity.ChatActivity
+import com.bobo.imbykotlin.utils.NotificationsUtils
+import com.hyphenate.chat.*
 
 
 /**
@@ -46,9 +47,77 @@ class IMApplication : Application() {
                 soundPool.play(duan, 1f, 1f, 0, 0, 1f)
             } else {
                 // 如果是在后台，则播放长的音效
-                soundPool.play(yulu, 1f, 1f, 0, 0, 1f)
-                Log.d("App", "播放长的音效")
+                val b: Boolean = NotificationsUtils.isNotificationEnabled(applicationContext)
+                if (!b) {
+                    // 如果没有显示通知栏的权限咱自己铃声响起
+                    soundPool.play(yulu, 1f, 1f, 0, 0, 1f)
+                }
+                Log.d("App", "app 在后台 播放长的音效 并弹出通知$b")
+
+                // 弹出(Notification)通知到通知栏
+                showNotification(p0)
             }
+        }
+    }
+
+    /**
+     * 当app在后台收到消息显示通知的方法
+     */
+    private fun showNotification(p0: MutableList<EMMessage>?) {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        p0?.forEach {
+            var contentText = getString(R.string.no_text_message)
+
+            // 判断收到的消息是否是文本消息
+            if (it.type == EMMessage.Type.TXT) {
+                contentText = (it.body as EMTextMessageBody).message
+            }
+
+            // 注释的代码在Android 8.0(<API 26) 之前可以用不适合2020年了
+//            val notification = Notification.Builder(this)
+//                .setContentTitle(getString(R.string.receive_new_message))
+//                .setContentText(contentText)
+//                .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ease_default_icon))
+//                .setSmallIcon(R.mipmap.ic_contact)
+//                .notification
+//
+//            // 第一个参数id随便写个数字就可以
+//            notificationManager.notify(1, notification)
+
+            // 创建一个通知(必须设置channelId)
+            val channelId = "ChannelId"; // 通知渠道
+            //最主要
+            val intent = Intent(this, ChatActivity::class.java)
+            // 标识来自状态栏 -> 用户点击的时候跳转到聊天页需要传值
+            intent.putExtra("username", it.conversationId())
+            // val pendingIntent = PendingIntent.getActivity(this, 1, intent,
+            //     PendingIntent.FLAG_UPDATE_CURRENT)
+            val taskStackBuilder = TaskStackBuilder.create(this).addParentStack(
+                ChatActivity::class.java).addNextIntent(intent)
+            val pendingIntent = taskStackBuilder.getPendingIntent(1,
+                PendingIntent.FLAG_UPDATE_CURRENT)
+            val notification = Notification.Builder(this)
+                .setChannelId(channelId)
+                .setSmallIcon(R.mipmap.ic_contact)
+                .setContentIntent(pendingIntent)
+                .setContentTitle(getString(R.string.receive_new_message))
+                .setContentText(contentText)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ease_default_icon))
+                .setAutoCancel(true) // 设置点击之后notification消失
+                .build();
+
+            // 下面这两句代码使用自己的铃声 对原生有用 对国产手机没有用
+            // notification.sound= Uri.parse("android.resource://" + getPackageName() + "/" +R.raw.yulu);
+            // notification.defaults = Notification.DEFAULT_SOUND;
+
+            val channel = NotificationChannel(channelId, "ChannelId",
+                NotificationManager.IMPORTANCE_HIGH)
+            // 设置不显示角标（国内的主流app在安卓系统上都不显示角标例如微信）
+            channel.setShowBadge(false)
+            notificationManager.createNotificationChannel(channel)
+
+            // 发送通知(Notification与NotificationManager的channelId必须对应)
+            notificationManager.notify(1, notification)
         }
     }
 

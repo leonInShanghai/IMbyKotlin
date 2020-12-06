@@ -1,6 +1,7 @@
 package com.bobo.imbykotlin.ui.fragment
 
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import com.bobo.imbykotlin.R;
 import com.bobo.imbykotlin.adapter.ConversationListAdapter
 import com.bobo.imbykotlin.adapter.EMMessageListenerAdapter
@@ -37,6 +38,8 @@ class ConversationFragment: BaseFragment() {
         super.onResume()
         // 重新加载数据
         loadConversations()
+
+        Log.d("ConversationFragment", "onResume loadConversations()")
     }
 
     override fun init() {

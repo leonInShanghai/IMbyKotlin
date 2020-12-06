@@ -60,7 +60,8 @@
         <!-- 聊天页 -->
         <activity
             android:name=".ui.activity.ChatActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".ui.activity.MainActivity"/>
         <!-- 注册页 -->
         <activity
             android:name=".ui.activity.RegisterActivity"
