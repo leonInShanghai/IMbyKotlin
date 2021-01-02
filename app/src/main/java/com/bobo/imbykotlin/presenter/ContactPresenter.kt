@@ -52,7 +52,7 @@ class ContactPresenter(val view : ContactContract.View) : ContactContract.Presen
 
                 // 没有异常就是请求联系人成功 到主线程通知View层
                 uiThread {
-                    view.onLoadContactsSuccess()
+                    view.onLoadContactsSuccess(contactListItems)
                     Log.d("ContactPresenter", "加载联系人成功" + usernames.size)
                     Log.d("ContactPresenter", "线程" + Thread.currentThread().name)
                 }

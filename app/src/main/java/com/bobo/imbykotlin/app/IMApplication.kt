@@ -17,6 +17,7 @@ import com.bobo.imbykotlin.utils.NotificationsUtils
 import com.hyphenate.chat.*
 
 
+
 /**
  * Created by 公众号：IT波 on 2020/9/12 Copyright © Leon. All rights reserved.
  * Functions:  Application 全局唯一默认单例

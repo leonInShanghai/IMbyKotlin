@@ -43,4 +43,6 @@
     <string name="send_message_failed">Send message failed</string>
     <string name="no_text_message">Non-text messages</string>
     <string name="receive_new_message">Got a new message</string>
+
+    <string name="no_more_historical_news">"No more historical news"</string>
 </resources>

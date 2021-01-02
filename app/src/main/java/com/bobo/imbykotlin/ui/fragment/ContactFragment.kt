@@ -1,19 +1,22 @@
 package com.bobo.imbykotlin.ui.fragment
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
 import android.view.View
-import com.bobo.imbykotlin.R;
+import android.view.ViewGroup
+import com.bobo.imbykotlin.R
 import com.bobo.imbykotlin.adapter.ContactListAdapter
 import com.bobo.imbykotlin.adapter.EMContactListenerAdapter
 import com.bobo.imbykotlin.contract.ContactContract
+import com.bobo.imbykotlin.data.ContactListItem
 import com.bobo.imbykotlin.presenter.ContactPresenter
 import com.bobo.imbykotlin.ui.activity.AddFrinedActivity
 import com.bobo.imbykotlin.widget.SlideBar
 import com.hyphenate.chat.*
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import kotlinx.android.synthetic.main.header.*
-import kotlinx.android.synthetic.main.view_contact_item.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
@@ -45,7 +48,7 @@ class ContactFragment: BaseFragment() , ContactContract.View {
         }
     }
 
-    override fun getLayoutResId(): Int = R.layout.fragment_contacts;
+    override fun getLayoutResId() : Int = R.layout.fragment_contacts
 
     @SuppressLint("ResourceAsColor")
     override fun init() {
@@ -57,7 +60,7 @@ class ContactFragment: BaseFragment() , ContactContract.View {
         EMClient.getInstance().contactManager().setContactListener(contactListener)
         initSlideBar()
 
-        // 加载联系人列表
+        // 加载联系人一进来加载一次
         presenter.loadContacts()
     }
 
@@ -169,7 +172,7 @@ class ContactFragment: BaseFragment() , ContactContract.View {
     /**
      * 联系人列表加载成功
      */
-    override fun onLoadContactsSuccess() {
+    override fun onLoadContactsSuccess(contactListItems: MutableList<ContactListItem>) {
 
         // java.lang.IllegalStateException: swipRefreshLayout must not be null
         if (swipRefreshLayout != null){
@@ -180,7 +183,8 @@ class ContactFragment: BaseFragment() , ContactContract.View {
         // java.lang.IllegalStateException: recyclerView must not be null
         if (recyclerView != null) {
             // recyclerview更新列表
-            recyclerView.adapter.notifyDataSetChanged()
+            // recyclerView.adapter.notifyDataSetChanged()
+            (recyclerView.adapter as ContactListAdapter).updateList(contactListItems)
         }
     }
 

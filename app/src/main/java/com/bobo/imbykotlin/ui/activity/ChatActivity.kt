@@ -1,7 +1,6 @@
 package com.bobo.imbykotlin.ui.activity
 
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -16,6 +15,7 @@ import com.bobo.imbykotlin.presenter.ChatPresenter
 import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMMessage
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.android.synthetic.main.activity_chat.recyclerView
 import kotlinx.android.synthetic.main.header.*
 import org.jetbrains.anko.toast
 
@@ -51,6 +51,9 @@ class ChatActivity : BaseActivity(), ChatContract.View{
         // 初始化聊天输入框及发送按钮
         initEditText()
 
+        // 初始化下拉加载更多
+        initSwipeRefreshLayout()
+
         // 初始化RecyclerView
         initRecyclerView()
 
@@ -67,32 +70,73 @@ class ChatActivity : BaseActivity(), ChatContract.View{
         recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
+            // 软键盘弹出 RecyclerView会随之上移 这个方法不适用于当前场景
+            // (layoutManager as LinearLayoutManager).stackFromEnd = true
             adapter = MessageListAdapter(context, presenter.messages)
 
-            // RecyclerView滚动监听
-            addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            // RecyclerView滚动监听 就是下拉刷新，下面的代码可以用但是体验不好。
+            // 2020-1-1 改到initSwipeRefreshLayout()中实现
+//            addOnScrollListener(object: RecyclerView.OnScrollListener() {
+//
+//                // 当滚动状态发送改变时
+//                override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+//                    // 当循环视图是一个空闲的状态（静止）
+//                    // 检查是否划到顶部了,如果是就加载更多数据 IDLE:空闲的
+//                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                        val linearLayoutManager = layoutManager as LinearLayoutManager
+//                        // 如果第一个可见的条目的位置是0，为划到了顶部
+//                        if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
+//                            // 加载更多（聊天历史）数据
+//                            presenter.loadMoreMessages(username)
+//                        }
+//                    }
+//                }
+//            })
+        }
 
-                // 当滚动状态发送改变时
-                override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-                    // 当循环视图是一个空闲的状态（静止）
-                    // 检查是否划到顶部了,如果是就加载更多数据 IDLE:空闲的
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        val linearLayoutManager = layoutManager as LinearLayoutManager
-                        // 如果第一个可见的条目的位置是0，为划到了顶部
-                        if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
-                            // 加载更多（聊天历史）数据
-                            presenter.loadMoreMessages(username)
-                        }
-                    }
+        // 当键盘弹出（此时用户想要输入内容）滚动到最后一条信息
+        val counter = Runnable {
+            recyclerView.scrollToPosition(presenter.messages.size - 1);
+        }
+
+        // 软键盘弹出 RecyclerView会随之上移
+        recyclerView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener{
+            override fun onLayoutChange(p0: View?, left: Int, top: Int, right: Int, bottom: Int,
+                oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
+                if (bottom < oldBottom) {
+                    recyclerView.postDelayed(counter, 100)
                 }
-            })
+            }
+
+        })
+    }
+
+    /**
+     * 下拉加载更多消息
+     */
+    private fun initSwipeRefreshLayout() {
+        // 设置下拉时出现的箭头颜色
+        // swipRefreshLayout.setColorSchemeResources(R.color.mainColor)
+        // 一进来本页面就自动刷新一次
+        // swipRefreshLayout.isRefreshing = true
+
+        // 给swipRefreshLayout设置属性简化写法
+        swipRefreshLayout.apply {
+            // 设置下拉时出现的箭头颜色
+            setColorSchemeResources(R.color.mainColor)
+
+            // 设置下拉监听
+            setOnRefreshListener {
+                // 加载更多（聊天历史）数据
+                presenter.loadMoreMessages(username)
+            }
         }
     }
 
     // 发送消息
     fun send() {
-        // 先隐藏键盘
-        hideSoftKeyboard()
+        // 先隐藏键盘 FIXME:不用隐藏键盘用户说完一句话再说第二句碍事
+        // hideSoftKeyboard()
 
         // 注释原因这样写用户发送不了空格
         // val message = edit.text.trim().toString()
@@ -100,6 +144,9 @@ class ChatActivity : BaseActivity(), ChatContract.View{
         val message = edit.text.toString()
         // 发送一条消息
         presenter.sendMessage(username, message)
+
+        // 清空编辑(输入框)框
+        edit.text.clear()
     }
 
     private fun initEditText() {
@@ -159,9 +206,6 @@ class ChatActivity : BaseActivity(), ChatContract.View{
         recyclerView.adapter.notifyDataSetChanged()
         Log.e("ChatActivity", "onSendMessageSuccess");
 
-        // 清空编辑(输入框)框
-        edit.text.clear()
-
         // 发送或接收到新消息的时候RecyclerView自动往上滚动
         scrollToBottom()
     }
@@ -191,6 +235,20 @@ class ChatActivity : BaseActivity(), ChatContract.View{
     }
 
     override fun onMoreMessageLoaded(size: Int) {
+
+        // 避免空指针 2020-1-1新增加
+        if (swipRefreshLayout != null) {
+            // 加载失败后刷新图标要隐藏
+            swipRefreshLayout.isRefreshing = false
+        }
+
+        // 没有更多历史消息消失
+        if (size == 0) {
+            toast(getString(R.string.no_more_historical_news));
+            // 不要再继续往下执行不必要的刷新
+            return
+        }
+
         recyclerView.adapter.notifyDataSetChanged()
         recyclerView.scrollToPosition(size)
     }

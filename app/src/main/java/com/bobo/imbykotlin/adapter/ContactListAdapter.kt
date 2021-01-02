@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import com.bobo.imbykotlin.data.ContactListItem
@@ -15,24 +16,30 @@ import com.hyphenate.EMCallBack
 import com.hyphenate.chat.EMClient
 import org.jetbrains.anko.runOnUiThread
 import org.jetbrains.anko.toast
+import kotlin.math.log
 
 /**
  * Created by 公众号：IT波 on 2020/10/26 Copyright © Leon. All rights reserved.
  * Functions: 联系人类别recyclerview的适配器
  */
-class ContactListAdapter(val context: Context, val contactListItems: MutableList<ContactListItem>) :
+class ContactListAdapter(val context: Context, val contactListItems1: MutableList<ContactListItem>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    // 加这个变量是为了刷新都在主线程进行 之前那样子线程操作数据源主线程刷新会数组越界
+    private var mContactListItems = mutableListOf<ContactListItem>()
+
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+        mContactListItems.addAll(contactListItems1)
         return ContactListItemViewHoder(ContactListItemView(context))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         val contactListItemView = holder!!.itemView as ContactListItemView
-        contactListItemView.bindView(contactListItems[position])
+        contactListItemView.bindView(mContactListItems[position])
 
         // 当前position的用户名
-        val userName = contactListItems[position].userName
+        val userName = mContactListItems[position].userName
         // recyclerview条目点击事件的处理
         contactListItemView.setOnClickListener {
             // 跳转到聊天activity
@@ -91,15 +98,28 @@ class ContactListAdapter(val context: Context, val contactListItems: MutableList
     override fun getItemCount(): Int {
         // Inconsistency detected. Invalid view holder adapter positionViewHolder{61caefa
         // position=8 id=-1, oldPos=-1, pLpos:-1 no parent}
-        if (contactListItems == null) {
+        if (mContactListItems == null) {
             return 0
         }
 
-        return contactListItems.size
+        return mContactListItems.size
     }
 
     class ContactListItemViewHoder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
     }
+
+    /**
+     * 2021-1-1 增加刷新方法
+     */
+    open fun updateList(contactListItems : MutableList<ContactListItem>) {
+        if (contactListItems != null) {
+            mContactListItems.clear()
+            mContactListItems.addAll(contactListItems)
+            notifyDataSetChanged()
+            Log.d("ContactListAdapter", "notifyDataSetChanged")
+        }
+    }
+
 }
 

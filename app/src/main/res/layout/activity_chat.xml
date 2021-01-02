@@ -9,12 +9,31 @@
 
     <include layout="@layout/header"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+
+<!--    <android.support.v7.widget.RecyclerView-->
+<!--        android:id="@+id/recyclerView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"/>-->
+
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:overScrollMode="never"/>
+        android:layout_weight="1">
+
+        <!-- android:layout_height="0dp"
+             android:layout_weight="1" -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
     <View
         android:layout_width="match_parent"

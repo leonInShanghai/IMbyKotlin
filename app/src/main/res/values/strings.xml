@@ -42,4 +42,6 @@
     <string name="send_message_failed">发送消息失败</string>
     <string name="no_text_message">非文本消息</string>
     <string name="receive_new_message">收到一条新消息</string>
+
+    <string name="no_more_historical_news">"没有更多历史消息"</string>
 </resources>
