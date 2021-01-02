@@ -14,11 +14,11 @@
 + 环信:easeui
 </br>
 <div align="center">
-<img src="https://github.com/leonInShanghai/IMbyKotlin/picture/1.webp" >
+<img src="https://github.com/leonInShanghai/IMbyKotlin/blob/master/picture/2.webp" >
  </div>
  </br>
  <div align="center">
-<img src="https://github.com/leonInShanghai/IMbyKotlin/picture/2.webp" >
+<img src="https://github.com/leonInShanghai/IMbyKotlin/blob/master/picture/2.webp" >
 </div>
 </br>
 
