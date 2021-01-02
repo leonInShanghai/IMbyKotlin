@@ -22,3 +22,6 @@
 </div>
 </br>
 
+<a href="https://github.com/leonInShanghai/IMbyKotlin/blob/master/app/release/app-release.apk">apk下载请在浏览器打开</a>
+
+
